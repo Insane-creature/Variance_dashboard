@@ -25,6 +25,29 @@ def load_data():
 
 df = load_data()
 
+st.sidebar.header("📊 Filters")
+
+# Kitchen EBITDA filter
+kitchen_ebitda_range = st.sidebar.slider(
+    "Kitchen EBITDA (₹)", 
+    float(df["KITCHEN_EBITDA"].min()), 
+    float(df["KITCHEN_EBITDA"].max()), 
+    (float(df["KITCHEN_EBITDA"].min()), float(df["KITCHEN_EBITDA"].max()))
+)
+
+# Net Revenue filter
+revenue_range = st.sidebar.slider(
+    "Net Revenue (₹)", 
+    float(df["NET_REVENUE"].min()), 
+    float(df["NET_REVENUE"].max()), 
+    (float(df["NET_REVENUE"].min()), float(df["NET_REVENUE"].max()))
+)
+# Applying filter
+df = df[
+    (df["KITCHEN_EBITDA"].between(kitchen_ebitda_range[0], kitchen_ebitda_range[1])) &
+    (df["NET_REVENUE"].between(revenue_range[0], revenue_range[1]))
+]
+
 st.title("📊 Dashboard 2: Variance Level P&L")
 
 tab1, tab2 = st.tabs(["📉 Avg Variance by Revenue Cohort", "📋 Store Count by Month & Revenue"])
